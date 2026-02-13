@@ -1,11 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Gym } from './pages/gym/gym';
-import { Library } from './pages/library/library';
+import { GymButton } from './pages/gym-button/gym-button';
+import { LibraryButton } from './pages/library-button/library-button';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Gym, Library],
+  imports: [RouterOutlet, GymButton, LibraryButton],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
