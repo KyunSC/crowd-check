@@ -10,3 +10,8 @@ body {
   color: #222;
   min-height: 100vh;
 }
+
+body.dark-theme {
+  background-color: #000;
+  color: #fff;
+}

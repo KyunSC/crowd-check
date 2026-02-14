@@ -1,0 +1,14 @@
+:host {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+}
+
+button {
+  font-size: 2rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+}
