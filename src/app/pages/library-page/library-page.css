@@ -4,3 +4,13 @@
   align-items: center;
   height: 100%;
 }
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: 4rem;
+  text-align: center;
+  color: #ed1b2f;
+  padding: 3rem 1rem 1rem;
+  letter-spacing: -0.02em;
+}
