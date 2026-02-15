@@ -1,0 +1,22 @@
+:host {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+}
+
+.home-btn {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 1.5rem 3rem;
+  cursor: pointer;
+  background-color: #ed1b2f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.home-btn:hover {
+  background-color: #c8102e;
+}
