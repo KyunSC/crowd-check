@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-vote-button',
@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './vote-button.css',
 })
 export class VoteButton {
-
+  @Input() label: string = 'Vote';
 }
