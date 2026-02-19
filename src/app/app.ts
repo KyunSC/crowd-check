@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { GymButton } from './pages/gym-button/gym-button';
-import { LibraryButton } from './pages/library-button/library-button';
+import { GymButton } from './components/gym-button/gym-button';
+import { LibraryButton } from './components/library-button/library-button';
 import { ThemeToggle } from './components/theme-toggle/theme-toggle';
 
 @Component({

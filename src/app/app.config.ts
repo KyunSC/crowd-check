@@ -2,8 +2,8 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
-import { LibraryButton } from './pages/library-button/library-button';
-import { GymButton } from './pages/gym-button/gym-button';
+import { LibraryButton } from './components/library-button/library-button';
+import { GymButton } from './components/gym-button/gym-button';
 import { GymPage } from './pages/gym-page/gym-page';
 import { LibraryPage } from './pages/library-page/library-page';
 
