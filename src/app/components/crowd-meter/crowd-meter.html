@@ -1,0 +1,14 @@
+<div class="meter">
+  <div class="segment-wrapper">
+    <div class="segment segment-green" [class.active]="level >= 1"></div>
+    <span class="segment-label">Not busy</span>
+  </div>
+  <div class="segment-wrapper">
+    <div class="segment segment-yellow" [class.active]="level >= 2"></div>
+    <span class="segment-label">Moderate</span>
+  </div>
+  <div class="segment-wrapper">
+    <div class="segment segment-red" [class.active]="level >= 3"></div>
+    <span class="segment-label">Packed</span>
+  </div>
+</div>

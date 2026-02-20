@@ -16,3 +16,12 @@
 .vote-btn:hover {
   background-color: #c8102e;
 }
+
+.vote-btn.selected {
+  background-color: #c8102e;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px #ed1b2f;
+}
+
+:host-context(body.dark-theme) .vote-btn.selected {
+  box-shadow: 0 0 0 3px #000, 0 0 0 5px #ed1b2f;
+}
