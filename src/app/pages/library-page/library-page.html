@@ -1,7 +1,8 @@
 <h1>Library</h1>
+<app-crowd-meter [level]="crowdLevel()"></app-crowd-meter>
 <section class="vote-container">
-  <app-vote-button label="👤"></app-vote-button>
-  <app-vote-button label="👤👤"></app-vote-button>
-  <app-vote-button label="👤👤👤"></app-vote-button>
+  <app-vote-button label="👤" [value]="1" [selected]="crowdLevel() === 1" (voted)="crowdLevel.set($event)"></app-vote-button>
+  <app-vote-button label="👤👤" [value]="2" [selected]="crowdLevel() === 2" (voted)="crowdLevel.set($event)"></app-vote-button>
+  <app-vote-button label="👤👤👤" [value]="3" [selected]="crowdLevel() === 3" (voted)="crowdLevel.set($event)"></app-vote-button>
 </section>
 <app-home-button></app-home-button>
