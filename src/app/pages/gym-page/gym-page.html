@@ -1,8 +1,9 @@
 <h1>Gym</h1>
 <app-crowd-meter [level]="crowdLevel()"></app-crowd-meter>
 <section class="vote-container">
-  <app-vote-button label="👤" [value]="1" [selected]="crowdLevel() === 1" (voted)="crowdLevel.set($event)"></app-vote-button>
-  <app-vote-button label="👤👤" [value]="2" [selected]="crowdLevel() === 2" (voted)="crowdLevel.set($event)"></app-vote-button>
-  <app-vote-button label="👤👤👤" [value]="3" [selected]="crowdLevel() === 3" (voted)="crowdLevel.set($event)"></app-vote-button>
+  <app-vote-button label="👤" [value]="1" [selected]="pendingLevel() === 1" (voted)="pendingLevel.set($event)"></app-vote-button>
+  <app-vote-button label="👤👤" [value]="2" [selected]="pendingLevel() === 2" (voted)="pendingLevel.set($event)"></app-vote-button>
+  <app-vote-button label="👤👤👤" [value]="3" [selected]="pendingLevel() === 3" (voted)="pendingLevel.set($event)"></app-vote-button>
 </section>
+<app-confirm-button [disabled]="pendingLevel() === 0" (confirmed)="onConfirm()"></app-confirm-button>
 <app-home-button></app-home-button>
