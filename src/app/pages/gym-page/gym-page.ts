@@ -1,20 +1,24 @@
 import { Component, signal } from '@angular/core';
 import { HomeButton } from '../../components/home-button/home-button';
-import { VoteButton } from '../../components/vote-button/vote-button';
-import { CrowdMeter } from '../../components/crowd-meter/crowd-meter';
-import { ConfirmButton } from '../../components/confirm-button/confirm-button';
+import { FloorVotingPanel } from '../../components/floor-voting-panel/floor-voting-panel';
+import { GYMS, GymZone, Gym } from '../../data/gym-data';
 
 @Component({
   selector: 'app-gym-page',
-  imports: [HomeButton, VoteButton, CrowdMeter, ConfirmButton],
+  imports: [HomeButton, FloorVotingPanel],
   templateUrl: './gym-page.html',
   styleUrl: './gym-page.css',
 })
 export class GymPage {
-  crowdLevel = signal(0);
-  pendingLevel = signal(0);
+  gyms: Gym[] = GYMS;
+  expandedZoneKey = signal<string | null>(null);
 
-  onConfirm() {
-    this.crowdLevel.set(this.pendingLevel());
+  toggleZone(gymId: string, zoneId: string) {
+    const key = `${gymId}-${zoneId}`;
+    this.expandedZoneKey.set(this.expandedZoneKey() === key ? null : key);
+  }
+
+  isZoneOpen(gymId: string, zoneId: string): boolean {
+    return this.expandedZoneKey() === `${gymId}-${zoneId}`;
   }
 }

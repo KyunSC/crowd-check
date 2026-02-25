@@ -1,9 +1,20 @@
 <h1>Gym</h1>
-<app-crowd-meter [level]="crowdLevel()"></app-crowd-meter>
-<section class="vote-container">
-  <app-vote-button label="👤" [value]="1" [selected]="pendingLevel() === 1" (voted)="pendingLevel.set($event)"></app-vote-button>
-  <app-vote-button label="👤👤" [value]="2" [selected]="pendingLevel() === 2" (voted)="pendingLevel.set($event)"></app-vote-button>
-  <app-vote-button label="👤👤👤" [value]="3" [selected]="pendingLevel() === 3" (voted)="pendingLevel.set($event)"></app-vote-button>
-</section>
-<app-confirm-button [disabled]="pendingLevel() === 0" (confirmed)="onConfirm()"></app-confirm-button>
+
+@for (gym of gyms; track gym.id) {
+  <div class="zone-list">
+    @for (zone of gym.zones; track zone.id) {
+      <div class="zone-item">
+        <button class="zone-header" (click)="toggleZone(gym.id, zone.id)">
+          <span class="zone-name">{{ zone.name }}</span>
+          <span class="chevron" [class.open]="isZoneOpen(gym.id, zone.id)">▼</span>
+        </button>
+
+        @if (isZoneOpen(gym.id, zone.id)) {
+          <app-floor-voting-panel [floorName]="zone.name"></app-floor-voting-panel>
+        }
+      </div>
+    }
+  </div>
+}
+
 <app-home-button></app-home-button>
