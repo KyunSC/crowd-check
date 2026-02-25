@@ -1,0 +1,129 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 6rem;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: 4rem;
+  text-align: center;
+  color: #ed1b2f;
+  padding: 3rem 1rem 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.library-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 700px;
+  padding: 0 1rem;
+}
+
+.library-item {
+  border: 1.5px solid #d1d5db;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.library-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.library-header:hover {
+  background: #f9f9f7;
+}
+
+.floor-list {
+  border-top: 1.5px solid #d1d5db;
+}
+
+.floor-item {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.floor-item:last-child {
+  border-bottom: none;
+}
+
+.floor-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.floor-header:hover {
+  background: #f3f3f0;
+}
+
+.chevron {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Dark theme */
+:host-context(.dark-theme) .library-item {
+  background: #111;
+  border-color: #374151;
+}
+
+:host-context(.dark-theme) .library-header {
+  color: #f9fafb;
+}
+
+:host-context(.dark-theme) .library-header:hover {
+  background: #1f2937;
+}
+
+:host-context(.dark-theme) .floor-list {
+  border-top-color: #374151;
+}
+
+:host-context(.dark-theme) .floor-item {
+  border-bottom-color: #374151;
+}
+
+:host-context(.dark-theme) .floor-header {
+  color: #d1d5db;
+}
+
+:host-context(.dark-theme) .floor-header:hover {
+  background: #1a1a1a;
+}

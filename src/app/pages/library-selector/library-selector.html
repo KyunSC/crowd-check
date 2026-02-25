@@ -1,0 +1,31 @@
+<h1>Libraries</h1>
+
+<div class="library-list">
+  @for (lib of libraries; track lib.id) {
+    <div class="library-item">
+      <button class="library-header" (click)="toggleLibrary(lib.id)">
+        <span class="library-name">{{ lib.name }}</span>
+        <span class="chevron" [class.open]="isLibraryOpen(lib.id)">▼</span>
+      </button>
+
+      @if (isLibraryOpen(lib.id)) {
+        <div class="floor-list">
+          @for (floor of lib.floors; track floor.id) {
+            <div class="floor-item">
+              <button class="floor-header" (click)="toggleFloor(lib.id, floor.id)">
+                <span class="floor-name">{{ floor.name }}</span>
+                <span class="chevron" [class.open]="isFloorOpen(lib.id, floor.id)">▼</span>
+              </button>
+
+              @if (isFloorOpen(lib.id, floor.id)) {
+                <app-floor-voting-panel [floorName]="floor.name"></app-floor-voting-panel>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<app-home-button></app-home-button>

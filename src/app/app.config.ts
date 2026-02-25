@@ -6,13 +6,15 @@ import { LibraryButton } from './components/library-button/library-button';
 import { GymButton } from './components/gym-button/gym-button';
 import { GymPage } from './pages/gym-page/gym-page';
 import { LibraryPage } from './pages/library-page/library-page';
+import { LibrarySelector } from './pages/library-selector/library-selector';
 
 export const routes: Routes = [
   { path: '', component: Home },
   { path: 'library', component: LibraryButton },
   { path: 'gym', component: GymButton },
   { path: 'gym-page', component: GymPage },
-  { path: 'library-page', component: LibraryPage }
+  { path: 'library-page', component: LibraryPage },
+  { path: 'library-select', component: LibrarySelector }
 ];
 
 export const appConfig: ApplicationConfig = {
