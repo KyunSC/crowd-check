@@ -7,3 +7,15 @@ body {
   background-color: hsl(var(--b1));
   color: hsl(var(--bc));
 }
+
+[data-theme="light"] {
+  --hover-glow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] {
+  --hover-glow: 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.glow-hover:hover {
+  box-shadow: var(--hover-glow);
+}

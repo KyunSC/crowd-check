@@ -1,3 +1,10 @@
 :host {
   display: contents;
 }
+
+.btn-outline:hover {
+  background-color: hsl(var(--bc));
+  border-color: hsl(var(--bc));
+  color: hsl(var(--b1));
+  box-shadow: var(--hover-glow);
+}
