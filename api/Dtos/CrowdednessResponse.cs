@@ -1,6 +1,5 @@
 namespace CrowdCheck.Api.Dtos;
 
-// What the frontend receives on GET /api/crowdedness/{locationId}
 public record CrowdednessResponse(
     string LocationId,   // e.g. "b2-weight-room"
     string LocationName,

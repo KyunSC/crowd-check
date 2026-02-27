@@ -15,9 +15,12 @@ builder.Services.AddScoped<IDbConnection>(_ => new SqliteConnection(ConnectionSt
 
 builder.Services.AddOpenApi();
 
+var frontendOrigin = builder.Configuration["FrontendOrigin"]
+    ?? throw new InvalidOperationException("FrontendOrigin is not configured.");
+
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
-        policy.WithOrigins("http://localhost:4200") // Change to deployed URL in production.
+        policy.WithOrigins(frontendOrigin)
               .AllowAnyHeader()
               .AllowAnyMethod()));
 

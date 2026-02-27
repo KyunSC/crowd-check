@@ -93,9 +93,7 @@ public static class CrowdednessEndpoints
             if (location is null)
                 return Results.NotFound(new { error = $"Location '{locationId}' not found." });
 
-            // Build the hashed identity: HMAC-SHA256(IP + today's date, secret key).
-            // The date rotates the hash daily so votes can't be tracked across days.
-            // The secret key means an attacker with the DB still can't brute-force IPs.
+            // Build the hashed identity: HMAC-SHA256
             var ip = http.Connection.RemoteIpAddress?.ToString() ?? "unknown";
             var secret = Encoding.UTF8.GetBytes(config["IpHashSecret"] ?? throw new InvalidOperationException("IpHashSecret is not configured."));
             var rawIdentity = Encoding.UTF8.GetBytes($"{ip}:{DateTime.UtcNow:yyyy-MM-dd}");
@@ -139,9 +137,6 @@ public static class CrowdednessEndpoints
         {
             var since = DateTime.UtcNow - VoteWindow;
 
-            // GROUP BY lets us aggregate all votes per location in a single SQL query.
-            // AVG() computes the average level — this is a simpler version without time-weighting,
-            // good enough for an overview where we want speed over precision.
             var rows = await db.QueryAsync("""
                 SELECT
                     l.ExternalId,

@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 // The shape of what the API sends back for GET /api/crowdedness/{id}
 export interface CrowdednessResponse {
@@ -15,7 +16,7 @@ export interface CrowdednessResponse {
 @Injectable({ providedIn: 'root' })
 export class CrowdednessService {
   private http = inject(HttpClient);
-  private apiBase = 'http://localhost:5252/api';
+  private apiBase = environment.apiBase;
 
   // Returns an Observable — an async stream that emits the response when it arrives.
   // The component subscribes to it to get the value.
