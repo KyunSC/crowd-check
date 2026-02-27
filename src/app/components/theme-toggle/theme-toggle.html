@@ -1,3 +1,3 @@
-<button class="btn btn-ghost btn-circle text-xl" (click)="toggleTheme()">
-  {{ isDark() ? '☀️' : '🌙' }}
+<button class="btn btn-ghost btn-circle" (click)="toggleTheme()">
+  <lucide-icon [img]="isDark() ? Sun : Moon" [size]="20" [strokeWidth]="2"></lucide-icon>
 </button>

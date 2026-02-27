@@ -1,14 +1,16 @@
 import { Component, signal } from '@angular/core';
 import { FloorVotingPanel } from '../../components/floor-voting-panel/floor-voting-panel';
 import { LIBRARIES, Library } from '../../data/library-data';
+import { LucideAngularModule, ChevronDown } from 'lucide-angular';
 
 @Component({
   selector: 'app-library-selector',
-  imports: [FloorVotingPanel],
+  imports: [FloorVotingPanel, LucideAngularModule],
   templateUrl: './library-selector.html',
   styleUrl: './library-selector.css',
 })
 export class LibrarySelector {
+  readonly ChevronDown = ChevronDown;
   libraries: Library[] = LIBRARIES;
   expandedLibraryId = signal<string | null>(null);
   expandedFloorKey = signal<string | null>(null);

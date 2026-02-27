@@ -10,8 +10,9 @@
           <div class="collapse-title font-medium cursor-pointer flex justify-between items-center pr-4 hover:bg-base-200 transition-colors rounded-xl"
                (click)="toggleZone(gym.id, zone.id)">
             {{ zone.name }}
-            <span class="text-base-content/40 text-sm transition-transform duration-200"
-                  [class.rotate-180]="isZoneOpen(gym.id, zone.id)">▼</span>
+            <lucide-icon [img]="ChevronDown" [size]="16" [strokeWidth]="2"
+                         class="text-base-content/40 transition-transform duration-200"
+                         [class.rotate-180]="isZoneOpen(gym.id, zone.id)"></lucide-icon>
           </div>
           <div class="collapse-content !p-0">
             <app-floor-voting-panel [floorName]="zone.name" [locationId]="zone.id"></app-floor-voting-panel>
