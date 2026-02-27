@@ -1,11 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { HomeButton } from '../../components/home-button/home-button';
 import { FloorVotingPanel } from '../../components/floor-voting-panel/floor-voting-panel';
 import { LIBRARIES, Library } from '../../data/library-data';
 
 @Component({
   selector: 'app-library-selector',
-  imports: [HomeButton, FloorVotingPanel],
+  imports: [FloorVotingPanel],
   templateUrl: './library-selector.html',
   styleUrl: './library-selector.css',
 })

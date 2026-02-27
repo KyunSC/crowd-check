@@ -1,11 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { HomeButton } from '../../components/home-button/home-button';
 import { FloorVotingPanel } from '../../components/floor-voting-panel/floor-voting-panel';
-import { GYMS, GymZone, Gym } from '../../data/gym-data';
+import { GYMS, Gym } from '../../data/gym-data';
 
 @Component({
   selector: 'app-gym-page',
-  imports: [HomeButton, FloorVotingPanel],
+  imports: [FloorVotingPanel],
   templateUrl: './gym-page.html',
   styleUrl: './gym-page.css',
 })

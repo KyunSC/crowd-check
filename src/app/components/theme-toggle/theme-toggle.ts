@@ -26,6 +26,6 @@ export class ThemeToggle implements OnInit, OnDestroy {
 
   private applyTheme(dark: boolean) {
     this.isDark.set(dark);
-    document.body.classList.toggle('dark-theme', dark);
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
   }
 }

@@ -1,17 +1,9 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #E7E6E1;
-  color: #222;
-  min-height: 100vh;
-}
-
-body.dark-theme {
-  background-color: #000;
-  color: #fff;
+  background-color: hsl(var(--b1));
+  color: hsl(var(--bc));
 }

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm uninstall tailwindcss @tailwindcss/postcss daisyui)",
+      "Bash(npm install -D tailwindcss@3 autoprefixer daisyui@4)",
+      "Bash(node -e \"const t = require\\(''daisyui/src/theming/themes''\\); console.log\\(typeof t[''light''], typeof t[''dark'']\\)\")",
+      "Bash(timeout 15 npx ng serve --port 4201)",
+      "Bash(npx ng cache clean)"
+    ]
+  }
+}

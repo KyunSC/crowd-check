@@ -1,10 +1,21 @@
-<div class="meter">
-  <div class="track">
-    <div class="fill" [class.level-1]="level === 1" [class.level-2]="level === 2" [class.level-3]="level === 3"></div>
+<div class="flex flex-col gap-1 w-full">
+  <div class="flex justify-between text-xs font-medium text-base-content/40 uppercase tracking-wide">
+    <span>Not busy</span>
+    <span>Moderate</span>
+    <span>Packed</span>
   </div>
-  <div class="labels">
-    <span class="label">Not busy</span>
-    <span class="label">Moderate</span>
-    <span class="label">Packed</span>
-  </div>
+  <progress
+    class="progress w-full h-3"
+    [class.progress-success]="level === 1"
+    [class.progress-warning]="level === 2"
+    [class.progress-error]="level === 3"
+    [value]="level === 0 ? 0 : level"
+    max="3">
+  </progress>
+  <p class="text-xs text-base-content/40 text-right">
+    @if (level === 0) { No recent data }
+    @if (level === 1) { Currently quiet }
+    @if (level === 2) { Moderately busy }
+    @if (level === 3) { Very packed }
+  </p>
 </div>

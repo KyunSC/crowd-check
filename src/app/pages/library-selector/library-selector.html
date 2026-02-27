@@ -1,31 +1,37 @@
-<h1>Libraries</h1>
+<div class="max-w-2xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold text-primary mb-6" style="font-family: 'Playfair Display', serif">Libraries</h1>
 
-<div class="library-list">
-  @for (lib of libraries; track lib.id) {
-    <div class="library-item">
-      <button class="library-header" (click)="toggleLibrary(lib.id)">
-        <span class="library-name">{{ lib.name }}</span>
-        <span class="chevron" [class.open]="isLibraryOpen(lib.id)">▼</span>
-      </button>
-
-      @if (isLibraryOpen(lib.id)) {
-        <div class="floor-list">
-          @for (floor of lib.floors; track floor.id) {
-            <div class="floor-item">
-              <button class="floor-header" (click)="toggleFloor(lib.id, floor.id)">
-                <span class="floor-name">{{ floor.name }}</span>
-                <span class="chevron" [class.open]="isFloorOpen(lib.id, floor.id)">▼</span>
-              </button>
-
-              @if (isFloorOpen(lib.id, floor.id)) {
-                <app-floor-voting-panel [floorName]="floor.name" [locationId]="floor.id"></app-floor-voting-panel>
-              }
-            </div>
-          }
+  <div class="flex flex-col gap-3">
+    @for (lib of libraries; track lib.id) {
+      <div class="collapse bg-base-100 border border-base-300 rounded-xl"
+           [class.collapse-open]="isLibraryOpen(lib.id)"
+           [class.collapse-close]="!isLibraryOpen(lib.id)">
+        <div class="collapse-title font-semibold cursor-pointer flex justify-between items-center pr-4"
+             (click)="toggleLibrary(lib.id)">
+          {{ lib.name }}
+          <span class="text-base-content/40 text-sm transition-transform duration-200"
+                [class.rotate-180]="isLibraryOpen(lib.id)">▼</span>
         </div>
-      }
-    </div>
-  }
+        <div class="collapse-content !p-0">
+          <div class="flex flex-col divide-y divide-base-300 border-t border-base-300">
+            @for (floor of lib.floors; track floor.id) {
+              <div class="collapse"
+                   [class.collapse-open]="isFloorOpen(lib.id, floor.id)"
+                   [class.collapse-close]="!isFloorOpen(lib.id, floor.id)">
+                <div class="collapse-title text-sm font-medium pl-6 cursor-pointer flex justify-between items-center pr-4"
+                     (click)="toggleFloor(lib.id, floor.id)">
+                  {{ floor.name }}
+                  <span class="text-base-content/40 text-xs transition-transform duration-200"
+                        [class.rotate-180]="isFloorOpen(lib.id, floor.id)">▼</span>
+                </div>
+                <div class="collapse-content !p-0">
+                  <app-floor-voting-panel [floorName]="floor.name" [locationId]="floor.id"></app-floor-voting-panel>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
 </div>
-
-<app-home-button></app-home-button>

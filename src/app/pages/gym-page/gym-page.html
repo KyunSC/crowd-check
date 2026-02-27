@@ -1,20 +1,23 @@
-<h1>Gym</h1>
+<div class="max-w-2xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold text-primary mb-6" style="font-family: 'Playfair Display', serif">Gym</h1>
 
-@for (gym of gyms; track gym.id) {
-  <div class="zone-list">
-    @for (zone of gym.zones; track zone.id) {
-      <div class="zone-item">
-        <button class="zone-header" (click)="toggleZone(gym.id, zone.id)">
-          <span class="zone-name">{{ zone.name }}</span>
-          <span class="chevron" [class.open]="isZoneOpen(gym.id, zone.id)">▼</span>
-        </button>
-
-        @if (isZoneOpen(gym.id, zone.id)) {
-          <app-floor-voting-panel [floorName]="zone.name" [locationId]="zone.id"></app-floor-voting-panel>
-        }
-      </div>
-    }
-  </div>
-}
-
-<app-home-button></app-home-button>
+  @for (gym of gyms; track gym.id) {
+    <div class="flex flex-col gap-2">
+      @for (zone of gym.zones; track zone.id) {
+        <div class="collapse bg-base-100 border border-base-300 rounded-xl"
+             [class.collapse-open]="isZoneOpen(gym.id, zone.id)"
+             [class.collapse-close]="!isZoneOpen(gym.id, zone.id)">
+          <div class="collapse-title font-medium cursor-pointer flex justify-between items-center pr-4"
+               (click)="toggleZone(gym.id, zone.id)">
+            {{ zone.name }}
+            <span class="text-base-content/40 text-sm transition-transform duration-200"
+                  [class.rotate-180]="isZoneOpen(gym.id, zone.id)">▼</span>
+          </div>
+          <div class="collapse-content !p-0">
+            <app-floor-voting-panel [floorName]="zone.name" [locationId]="zone.id"></app-floor-voting-panel>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

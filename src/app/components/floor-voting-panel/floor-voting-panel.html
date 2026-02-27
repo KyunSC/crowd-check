@@ -1,12 +1,18 @@
-<div class="panel">
+<div class="px-4 py-5 border-t border-base-300 flex flex-col gap-4">
   <app-crowd-meter [level]="crowdLevel()"></app-crowd-meter>
-  <section class="vote-container">
-    <app-vote-button label="👤" [value]="1" [selected]="pendingLevel() === 1" (voted)="pendingLevel.set($event)"></app-vote-button>
-    <app-vote-button label="👤👤" [value]="2" [selected]="pendingLevel() === 2" (voted)="pendingLevel.set($event)"></app-vote-button>
-    <app-vote-button label="👤👤👤" [value]="3" [selected]="pendingLevel() === 3" (voted)="pendingLevel.set($event)"></app-vote-button>
-  </section>
+
+  <div class="flex flex-col gap-2">
+    <p class="text-xs font-medium text-base-content/50 uppercase tracking-wide">How busy is it right now?</p>
+    <div class="join w-full">
+      <app-vote-button label="Quiet" [value]="1" [selected]="pendingLevel() === 1" (voted)="pendingLevel.set($event)"></app-vote-button>
+      <app-vote-button label="Moderate" [value]="2" [selected]="pendingLevel() === 2" (voted)="pendingLevel.set($event)"></app-vote-button>
+      <app-vote-button label="Packed" [value]="3" [selected]="pendingLevel() === 3" (voted)="pendingLevel.set($event)"></app-vote-button>
+    </div>
+  </div>
+
   <app-confirm-button [disabled]="pendingLevel() === 0 || isSubmitting()" (confirmed)="onConfirm()"></app-confirm-button>
+
   @if (errorMessage()) {
-    <p class="error">{{ errorMessage() }}</p>
+    <div class="alert alert-error py-2 text-sm">{{ errorMessage() }}</div>
   }
 </div>

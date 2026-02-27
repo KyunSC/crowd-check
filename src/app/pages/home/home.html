@@ -1,1 +1,24 @@
-<h1>Crowd Check</h1>
+<main class="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] gap-10 px-6 py-16">
+  <div class="text-center">
+    <h1 class="text-5xl font-bold text-primary mb-3" style="font-family: 'Playfair Display', serif">CrowdCheck</h1>
+    <p class="text-base-content/60 text-lg">Real-time crowdedness for McGill spaces</p>
+  </div>
+
+  <div class="flex gap-6 flex-wrap justify-center">
+    <a routerLink="/gym-page" class="card bg-base-100 border border-base-300 shadow-sm hover:shadow-md transition-shadow w-52 cursor-pointer">
+      <div class="card-body items-center text-center gap-2">
+        <span class="text-4xl mb-1">🏋️</span>
+        <h2 class="card-title text-lg">Gym</h2>
+        <p class="text-base-content/50 text-sm">Weight room, cardio & more</p>
+      </div>
+    </a>
+
+    <a routerLink="/library-select" class="card bg-base-100 border border-base-300 shadow-sm hover:shadow-md transition-shadow w-52 cursor-pointer">
+      <div class="card-body items-center text-center gap-2">
+        <span class="text-4xl mb-1">📚</span>
+        <h2 class="card-title text-lg">Libraries</h2>
+        <p class="text-base-content/50 text-sm">McLennan, Schulich & more</p>
+      </div>
+    </a>
+  </div>
+</main>

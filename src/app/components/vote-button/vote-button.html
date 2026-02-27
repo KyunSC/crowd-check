@@ -1,1 +1,7 @@
-<button class="vote-btn" [class.selected]="selected" (click)="onClick()">{{ label }}</button>
+<button
+  class="btn btn-sm join-item flex-1"
+  [class.btn-primary]="selected"
+  [class.btn-outline]="!selected"
+  (click)="onClick()">
+  {{ label }}
+</button>
