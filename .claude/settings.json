@@ -6,7 +6,14 @@
       "Bash(node -e \"const t = require\\(''daisyui/src/theming/themes''\\); console.log\\(typeof t[''light''], typeof t[''dark'']\\)\")",
       "Bash(timeout 15 npx ng serve --port 4201)",
       "Bash(npx ng cache clean)",
-      "Bash(npm install lucide-angular)"
+      "Bash(npm install lucide-angular)",
+      "Bash(dotnet restore)",
+      "Bash(/usr/local/share/dotnet/dotnet restore /Users/sunnychen/Developper/PersonalProjects/crowd-check/api/CrowdCheck.Api.csproj)",
+      "Bash(/usr/local/share/dotnet/dotnet build /Users/sunnychen/Developper/PersonalProjects/crowd-check/api/CrowdCheck.Api.csproj)",
+      "Bash(/Applications/Postgres.app/Contents/Versions/latest/bin/psql -U postgres -c \"\\\\l\")",
+      "Bash(/Applications/Postgres.app/Contents/Versions/latest/bin/createdb -U postgres crowdcheck)",
+      "Bash(/Applications/Postgres.app/Contents/Versions/latest/bin/psql -U postgres -d crowdcheck -c \"SELECT 1\")",
+      "Bash(/Applications/Postgres.app/Contents/Versions/latest/bin/psql -U postgres -d crowdcheck -c \"SELECT COUNT\\(*\\) FROM Locations;\")"
     ]
   }
 }

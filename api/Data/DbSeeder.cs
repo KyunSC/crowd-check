@@ -15,13 +15,12 @@ public static class DbSeeder
 
         int Insert(string externalId, string name, LocationType type, int? parentId = null)
         {
-            db.Execute("""
+            return db.ExecuteScalar<int>("""
                 INSERT INTO Locations (ExternalId, Name, Type, ParentId)
                 VALUES (@ExternalId, @Name, @Type, @ParentId)
+                RETURNING Id
                 """,
                 new { ExternalId = externalId, Name = name, Type = (int)type, ParentId = parentId });
-
-            return db.ExecuteScalar<int>("SELECT last_insert_rowid()");
         }
 
         void AddChildren(int parentId, LocationType type, IEnumerable<(string id, string name)> children)

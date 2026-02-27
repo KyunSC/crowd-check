@@ -3,15 +3,15 @@ using System.Reflection;
 using CrowdCheck.Api.Data;
 using CrowdCheck.Api.Endpoints;
 using DbUp;
-using DbUp.Sqlite;
-using Microsoft.Data.Sqlite;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-const string ConnectionString = "Data Source=crowdcheck.db";
+var connectionString = builder.Configuration.GetConnectionString("Default")
+    ?? throw new InvalidOperationException("Connection string 'Default' is not configured.");
 
 // IDbConnection — Dapper uses this for all queries.
-builder.Services.AddScoped<IDbConnection>(_ => new SqliteConnection(ConnectionString));
+builder.Services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(connectionString));
 
 builder.Services.AddOpenApi();
 
@@ -34,11 +34,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseCors();
 
-// Must be called before any connection is opened — registers the native sqlite3 binary.
-SQLitePCL.Batteries_V2.Init();
-
 var upgrader = DeployChanges.To
-    .SqliteDatabase(ConnectionString)
+    .PostgresqlDatabase(connectionString)
     .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
     .LogToConsole()
     .Build();
