@@ -10,7 +10,7 @@
         </button>
 
         @if (isZoneOpen(gym.id, zone.id)) {
-          <app-floor-voting-panel [floorName]="zone.name"></app-floor-voting-panel>
+          <app-floor-voting-panel [floorName]="zone.name" [locationId]="zone.id"></app-floor-voting-panel>
         }
       </div>
     }

@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "dgSpecHash": "WWzpK4YtLZo=",
+  "success": true,
+  "projectFilePath": "/Users/sunnychen/Developper/PersonalProjects/crowd-check/api/CrowdCheck.Api.csproj",
+  "expectedPackageFiles": [
+    "/Users/sunnychen/.nuget/packages/dapper/2.1.66/dapper.2.1.66.nupkg.sha512",
+    "/Users/sunnychen/.nuget/packages/dbup-core/6.0.15/dbup-core.6.0.15.nupkg.sha512",
+    "/Users/sunnychen/.nuget/packages/dbup-sqlite/6.0.4/dbup-sqlite.6.0.4.nupkg.sha512",
+    "/Users/sunnychen/.nuget/packages/microsoft.aspnetcore.openapi/10.0.3/microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
+    "/Users/sunnychen/.nuget/packages/microsoft.data.sqlite.core/9.0.10/microsoft.data.sqlite.core.9.0.10.nupkg.sha512",
+    "/Users/sunnychen/.nuget/packages/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512",
+    "/Users/sunnychen/.nuget/packages/sourcegear.sqlite3/3.50.4.2/sourcegear.sqlite3.3.50.4.2.nupkg.sha512",
+    "/Users/sunnychen/.nuget/packages/sqlitepclraw.bundle_e_sqlite3/3.0.2/sqlitepclraw.bundle_e_sqlite3.3.0.2.nupkg.sha512",
+    "/Users/sunnychen/.nuget/packages/sqlitepclraw.config.e_sqlite3/3.0.2/sqlitepclraw.config.e_sqlite3.3.0.2.nupkg.sha512",
+    "/Users/sunnychen/.nuget/packages/sqlitepclraw.core/3.0.2/sqlitepclraw.core.3.0.2.nupkg.sha512",
+    "/Users/sunnychen/.nuget/packages/sqlitepclraw.provider.e_sqlite3/3.0.2/sqlitepclraw.provider.e_sqlite3.3.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

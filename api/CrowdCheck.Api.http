@@ -1,0 +1,6 @@
+@CrowdCheck.Api_HostAddress = http://localhost:5252
+
+GET {{CrowdCheck.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

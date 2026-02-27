@@ -42,3 +42,11 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# .NET
+api/bin/
+api/obj/
+api/*.db
+api/*.db-shm
+api/*.db-wal
+api/appsettings.json

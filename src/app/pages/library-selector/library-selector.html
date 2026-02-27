@@ -18,7 +18,7 @@
               </button>
 
               @if (isFloorOpen(lib.id, floor.id)) {
-                <app-floor-voting-panel [floorName]="floor.name"></app-floor-voting-panel>
+                <app-floor-voting-panel [floorName]="floor.name" [locationId]="floor.id"></app-floor-voting-panel>
               }
             </div>
           }
