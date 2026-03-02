@@ -1,0 +1,131 @@
+# =============================================================================
+# DOCKER COMPOSE — orchestrate multiple containers with one command
+# =============================================================================
+#
+# Without Compose, you'd have to:
+#   1. `docker run postgres ...` (with 10 flags for ports, volumes, env vars)
+#   2. `docker build` your API image
+#   3. `docker run your-api ...` (with 10 more flags, linking to postgres)
+#   4. Remember the exact commands every time
+#
+# With Compose, you define everything in this file and run:
+#   `docker compose up`      — start everything
+#   `docker compose down`    — stop everything
+#   `docker compose up -d`   — start in background (detached)
+#   `docker compose logs -f` — tail logs from all containers
+#
+# =============================================================================
+
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # PostgreSQL database
+  # ---------------------------------------------------------------------------
+  # This uses the official Postgres image from Docker Hub.
+  # No Dockerfile needed — we just configure it with environment variables.
+  db:
+    image: postgres:17
+
+    # Environment variables that the Postgres image reads on first startup
+    # to create the initial database and user.
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: crowdcheck
+
+    # PORT MAPPING: host:container
+    # The Postgres process inside the container listens on 5432 (its default).
+    # This maps your Mac's port 5432 → the container's port 5432.
+    # So `psql -h localhost -p 5432` on your Mac connects to this container.
+    #
+    # If you already have Postgres.app running on 5432, change to "5433:5432"
+    # and you'd connect with `psql -h localhost -p 5433` instead.
+    ports:
+      - "5432:5432"
+
+    # VOLUMES: persist data beyond the container's lifetime.
+    #
+    # Containers are ephemeral — when you `docker compose down`, the container
+    # is destroyed and all data inside it is lost. A volume maps a directory
+    # inside the container to storage managed by Docker on your Mac.
+    #
+    # `pgdata:/var/lib/postgresql/data` means:
+    #   - Docker creates a named volume called "pgdata" (stored somewhere on your Mac)
+    #   - It's mounted at /var/lib/postgresql/data inside the container
+    #   - Postgres writes all its data there
+    #   - When the container is destroyed and recreated, the data survives
+    #
+    # To wipe the database completely: `docker compose down -v` (the -v flag
+    # deletes volumes too).
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+    # HEALTHCHECK: Docker periodically runs this command inside the container
+    # to check if Postgres is actually ready to accept connections (not just
+    # that the process started). Other services can use `depends_on` with
+    # `condition: service_healthy` to wait for this.
+    #
+    # pg_isready is a Postgres utility that returns 0 (success) when the
+    # server is accepting connections, or 1 (failure) if not.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
+  # ---------------------------------------------------------------------------
+  # .NET API
+  # ---------------------------------------------------------------------------
+  api:
+    # Instead of pulling a pre-built image (like we did for Postgres), we
+    # BUILD an image from our Dockerfile.
+    # `context: ./api` means "use the api/ directory as the build context"
+    # (that's the directory Docker sends to the daemon and where it looks
+    # for the Dockerfile).
+    build:
+      context: ./api
+
+    # PORT MAPPING: your Mac's port 5252 → the container's port 8080.
+    # We use 5252 on the host to match your existing Angular dev setup
+    # (environment.ts points to localhost:5252).
+    # The container listens on 8080 (set by ASPNETCORE_URLS in the Dockerfile).
+    ports:
+      - "5252:8080"
+
+    # Environment variables injected into the container at runtime.
+    # These override anything in appsettings.json (which isn't even in the
+    # image since we .dockerignore'd it).
+    #
+    # ASP.NET reads env vars with __ (double underscore) as the separator
+    # for nested config keys. So ConnectionStrings__Default maps to:
+    #   { "ConnectionStrings": { "Default": "..." } }
+    #
+    # IMPORTANT: The connection string uses `Host=db` — not `localhost`!
+    # Inside Docker's network, each service is reachable by its service name.
+    # Our Postgres service is named "db" above, so "Host=db" resolves to
+    # the Postgres container's IP address. This is Docker's built-in DNS.
+    environment:
+      - ConnectionStrings__Default=Host=db;Port=5432;Database=crowdcheck;Username=postgres;Password=postgres
+      - FrontendOrigin=http://localhost:4200
+      - IpHashSecret=docker-dev-secret-not-for-production
+      - ASPNETCORE_ENVIRONMENT=Development
+
+    # DEPENDS_ON: start order + health gating.
+    # Without this, Docker might start the API before Postgres is ready,
+    # causing the DB migration in Program.cs to fail.
+    #
+    # `condition: service_healthy` means Docker waits until the `db` service's
+    # healthcheck passes before starting the API container.
+    # (Plain `depends_on: [db]` only waits for the container to START, not
+    # for Postgres to actually be ready — which takes a few seconds.)
+    depends_on:
+      db:
+        condition: service_healthy
+
+
+# Named volumes must be declared at the top level.
+# Docker manages the actual storage location on your Mac
+# (typically somewhere in ~/Library/Containers/com.docker.docker/).
+volumes:
+  pgdata:

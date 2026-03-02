@@ -1,0 +1,12 @@
+# When you run `docker build`, Docker sends all files in the current directory
+# (the "build context") to the Docker daemon. This file excludes things that
+# would waste time sending and could cause cache invalidation.
+
+bin/
+obj/
+publish/
+*.db
+*.db-shm
+*.db-wal
+appsettings.json
+appsettings.Development.json

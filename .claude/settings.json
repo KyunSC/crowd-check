@@ -14,7 +14,8 @@
       "Bash(/Applications/Postgres.app/Contents/Versions/latest/bin/createdb -U postgres crowdcheck)",
       "Bash(/Applications/Postgres.app/Contents/Versions/latest/bin/psql -U postgres -d crowdcheck -c \"SELECT 1\")",
       "Bash(/Applications/Postgres.app/Contents/Versions/latest/bin/psql -U postgres -d crowdcheck -c \"SELECT COUNT\\(*\\) FROM Locations;\")",
-      "Read(//usr/local/share/dotnet/**)"
+      "Read(//usr/local/share/dotnet/**)",
+      "Bash(createdb crowdcheck)"
     ]
   }
 }
