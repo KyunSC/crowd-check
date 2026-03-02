@@ -1,11 +1,28 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="utf-8">
+  <script>
+    // Apply theme before any rendering to prevent flash of wrong theme.
+    // This runs synchronously before Angular boots.
+    (function() {
+      var t = localStorage.getItem('theme');
+      if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
   <title>CrowdCheck</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <meta name="description" content="Real-time crowdedness tracker for McGill University gyms and libraries. Vote on how busy it is and help fellow students find space.">
+  <meta property="og:title" content="CrowdCheck">
+  <meta property="og:description" content="Real-time crowdedness tracker for McGill gyms and libraries.">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>

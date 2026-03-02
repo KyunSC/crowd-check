@@ -12,10 +12,16 @@ export class ThemeToggle implements OnInit, OnDestroy {
   readonly Moon = Moon;
   isDark = signal(false);
   private darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-  private mediaListener = (e: MediaQueryListEvent) => this.applyTheme(e.matches);
+  private mediaListener = (e: MediaQueryListEvent) => {
+    // Only follow OS changes if the user hasn't manually picked a theme.
+    if (!localStorage.getItem('theme')) this.applyTheme(e.matches);
+  };
 
   ngOnInit() {
-    this.applyTheme(this.darkMediaQuery.matches);
+    // Priority: saved preference > OS preference.
+    const saved = localStorage.getItem('theme');
+    const dark = saved ? saved === 'dark' : this.darkMediaQuery.matches;
+    this.applyTheme(dark);
     this.darkMediaQuery.addEventListener('change', this.mediaListener);
   }
 
@@ -24,7 +30,9 @@ export class ThemeToggle implements OnInit, OnDestroy {
   }
 
   toggleTheme() {
-    this.applyTheme(!this.isDark());
+    const dark = !this.isDark();
+    this.applyTheme(dark);
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
   }
 
   private applyTheme(dark: boolean) {

@@ -46,6 +46,7 @@ Thumbs.db
 # .NET
 api/bin/
 api/obj/
+api/publish/
 api/*.db
 api/*.db-shm
 api/*.db-wal

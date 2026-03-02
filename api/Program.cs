@@ -3,6 +3,7 @@ using System.Reflection;
 using CrowdCheck.Api.Data;
 using CrowdCheck.Api.Endpoints;
 using DbUp;
+using Microsoft.AspNetCore.HttpOverrides;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,11 +27,28 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
 if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 
 if (!app.Environment.IsDevelopment())
+{
     app.UseHttpsRedirection();
+
+    // Catches any unhandled exception and returns a generic 500 JSON response
+    // instead of leaking stack traces or internal details to the client.
+    app.UseExceptionHandler(error => error.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(new { error = "An unexpected error occurred." });
+    }));
+}
 
 app.UseCors("Frontend");
 

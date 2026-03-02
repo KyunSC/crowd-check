@@ -172,31 +172,51 @@ public static class CrowdednessEndpoints
 
         // GET /api/crowdedness
         // Returns current levels for ALL locations at once (used on the home/overview page).
+        // Uses the same time-weighted average as the per-location endpoint for consistency.
         app.MapGet("/api/crowdedness", async (IDbConnection db) =>
         {
             var since = DateTime.UtcNow - VoteWindow;
+            var now = DateTime.UtcNow;
 
-            var rows = await db.QueryAsync("""
-                SELECT
-                    l.ExternalId,
-                    l.Name,
-                    COUNT(v.Id)       AS VoteCount,
-                    AVG(CAST(v.Level AS REAL)) AS AvgLevel
-                FROM Locations l
-                LEFT JOIN Votes v
-                    ON v.LocationId = l.Id AND v.CreatedAt > @Since
-                WHERE l.ParentId IS NOT NULL
-                GROUP BY l.Id
-                ORDER BY l.Name
+            // Fetch all locations that have a parent (i.e. zones/floors, not top-level groups).
+            var locations = await db.QueryAsync<Location>("""
+                SELECT Id, ExternalId, Name FROM Locations WHERE ParentId IS NOT NULL ORDER BY Name
+                """);
+
+            // Fetch all recent votes in one query (more efficient than N+1 queries per location).
+            var allVotes = (await db.QueryAsync<(int LocationId, int Level, DateTime CreatedAt)>("""
+                SELECT LocationId, Level, CreatedAt
+                FROM Votes
+                WHERE CreatedAt > @Since
                 """,
-                new { Since = since });
+                new { Since = since })).ToLookup(v => v.LocationId);
 
-            var results = rows.Select(row => new CrowdednessResponse(
-                (string)row.ExternalId,
-                (string)row.Name,
-                row.VoteCount > 0 ? (int)Math.Round((double)row.AvgLevel) : 0,
-                (int)row.VoteCount
-            ));
+            var results = locations.Select(loc =>
+            {
+                var votes = allVotes[loc.Id];
+                var count = votes.Count();
+
+                if (count == 0)
+                    return new CrowdednessResponse(loc.ExternalId, loc.Name, 0, 0);
+
+                // Same time-decay weighting as the per-location endpoint.
+                var totalWeight = 0.0;
+                var weightedSum = 0.0;
+                foreach (var (_, level, createdAt) in votes)
+                {
+                    var age = (now - createdAt).TotalMinutes;
+                    var weight = 1.0 - (age / VoteWindow.TotalMinutes);
+                    weightedSum += level * weight;
+                    totalWeight += weight;
+                }
+
+                return new CrowdednessResponse(
+                    loc.ExternalId,
+                    loc.Name,
+                    (int)Math.Round(weightedSum / totalWeight),
+                    count
+                );
+            });
 
             return Results.Ok(results);
         });

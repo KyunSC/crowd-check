@@ -1,15 +1,17 @@
 import { Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { FloorVotingPanel } from '../../components/floor-voting-panel/floor-voting-panel';
 import { LIBRARIES, Library } from '../../data/library-data';
-import { LucideAngularModule, ChevronDown } from 'lucide-angular';
+import { LucideAngularModule, ChevronDown, ArrowLeft } from 'lucide-angular';
 
 @Component({
   selector: 'app-library-selector',
-  imports: [FloorVotingPanel, LucideAngularModule],
+  imports: [FloorVotingPanel, LucideAngularModule, RouterLink],
   templateUrl: './library-selector.html',
   styleUrl: './library-selector.css',
 })
 export class LibrarySelector {
+  readonly ArrowLeft = ArrowLeft;
   readonly ChevronDown = ChevronDown;
   libraries: Library[] = LIBRARIES;
   expandedLibraryId = signal<string | null>(null);

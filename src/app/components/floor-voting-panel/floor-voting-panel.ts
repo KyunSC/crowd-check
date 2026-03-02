@@ -19,6 +19,7 @@ export class FloorVotingPanel implements OnInit {
   crowdLevel = signal(0);
   pendingLevel = signal(0);
   isSubmitting = signal(false);
+  isLoading = signal(true); // true until the initial API fetch completes
   errorMessage = signal('');
 
   showHistory = signal(false);
@@ -57,8 +58,11 @@ export class FloorVotingPanel implements OnInit {
     if (!this.locationId) return;
 
     this.crowdednessService.getCrowdedness(this.locationId).subscribe({
-      next: (data) => this.crowdLevel.set(data.level),
-      error: (err) => this.errorMessage.set(`Could not load crowdedness: ${err.status} ${err.statusText || err.message || 'Unknown error'}`)
+      next: (data) => { this.crowdLevel.set(data.level); this.isLoading.set(false); },
+      error: (err) => {
+        this.errorMessage.set(`Could not load crowdedness: ${err.status} ${err.statusText || err.message || 'Unknown error'}`);
+        this.isLoading.set(false);
+      }
     });
   }
 
@@ -74,6 +78,11 @@ export class FloorVotingPanel implements OnInit {
         this.crowdednessService.getCrowdedness(this.locationId).subscribe({
           next: (data) => {
             this.crowdLevel.set(data.level);
+            this.pendingLevel.set(0);
+            this.isSubmitting.set(false);
+          },
+          error: () => {
+            // Vote was recorded, but re-fetch failed — still clear the UI.
             this.pendingLevel.set(0);
             this.isSubmitting.set(false);
           }
