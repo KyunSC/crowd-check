@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CrowdCheck.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b4a92f18fdb2d5b4c713e9cca8ceb958fc474b4b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bf45d96e76706dc1338b57af1002206dfe733492")]
 [assembly: System.Reflection.AssemblyProductAttribute("CrowdCheck.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CrowdCheck.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

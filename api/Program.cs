@@ -19,7 +19,7 @@ var frontendOrigin = builder.Configuration["FrontendOrigin"]
     ?? throw new InvalidOperationException("FrontendOrigin is not configured.");
 
 builder.Services.AddCors(options =>
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy("Frontend", policy =>
         policy.WithOrigins(frontendOrigin)
               .AllowAnyHeader()
               .AllowAnyMethod()));
@@ -32,7 +32,7 @@ if (app.Environment.IsDevelopment())
 if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 
-app.UseCors();
+app.UseCors("Frontend");
 
 var upgrader = DeployChanges.To
     .PostgresqlDatabase(connectionString)

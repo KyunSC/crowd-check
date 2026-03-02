@@ -2,6 +2,7 @@ using System.Data;
 using System.Security.Cryptography;
 using System.Text;
 using CrowdCheck.Api.Dtos;
+using CrowdCheck.Api.Models;
 using Dapper;
 
 namespace CrowdCheck.Api.Endpoints;
@@ -20,7 +21,7 @@ public static class CrowdednessEndpoints
         // Returns the current aggregated crowdedness level for one location.
         app.MapGet("/api/crowdedness/{locationId}", async (string locationId, IDbConnection db) =>
         {
-            var location = await db.QueryFirstOrDefaultAsync("""
+            var location = await db.QueryFirstOrDefaultAsync<Location>("""
                 SELECT Id, Name, ExternalId
                 FROM Locations
                 WHERE ExternalId = @LocationId
@@ -40,10 +41,10 @@ public static class CrowdednessEndpoints
                 WHERE LocationId = @LocationId AND CreatedAt > @Since
                 ORDER BY CreatedAt DESC
                 """,
-                new { LocationId = (int)location.Id, Since = since })).ToList();
+                new { LocationId = location.Id, Since = since })).ToList();
 
             if (votes.Count == 0)
-                return Results.Ok(new CrowdednessResponse(locationId, (string)location.Name, 0, 0));
+                return Results.Ok(new CrowdednessResponse(locationId, location.Name, 0, 0));
 
             // Weighted average with time decay.
             // A vote cast 5 minutes ago counts more than one cast 80 minutes ago.
@@ -65,7 +66,7 @@ public static class CrowdednessEndpoints
 
             return Results.Ok(new CrowdednessResponse(
                 locationId,
-                (string)location.Name,
+                location.Name,
                 aggregatedLevel,
                 votes.Count
             ));
@@ -85,7 +86,7 @@ public static class CrowdednessEndpoints
                 return Results.BadRequest(new { error = "Level must be 1 (not busy), 2 (moderate), or 3 (packed)." });
 
             // Look up the location.
-            var location = await db.QueryFirstOrDefaultAsync("""
+            var location = await db.QueryFirstOrDefaultAsync<Location>("""
                 SELECT Id FROM Locations WHERE ExternalId = @LocationId
                 """,
                 new { LocationId = locationId });
@@ -108,7 +109,7 @@ public static class CrowdednessEndpoints
                   AND HashedIdentity = @HashedIdentity
                   AND CreatedAt > @Since
                 """,
-                new { LocationId = (int)location.Id, HashedIdentity = hashedIdentity, Since = since });
+                new { LocationId = location.Id, HashedIdentity = hashedIdentity, Since = since });
 
             if (recentVoteCount > 0)
                 return Results.Json(
@@ -122,13 +123,51 @@ public static class CrowdednessEndpoints
                 """,
                 new
                 {
-                    LocationId = (int)location.Id,
+                    LocationId = location.Id,
                     request.Level,
                     HashedIdentity = hashedIdentity,
                     CreatedAt = DateTime.UtcNow
                 });
 
             return Results.Created($"/api/crowdedness/{locationId}", new { message = "Vote recorded." });
+        });
+
+        // GET /api/crowdedness/{locationId}/history
+        // Returns hourly vote buckets for a location over a selectable time range.
+        app.MapGet("/api/crowdedness/{locationId}/history", async (
+            string locationId,
+            string? range,
+            IDbConnection db) =>
+        {
+            var location = await db.QueryFirstOrDefaultAsync<Location>("""
+                SELECT Id FROM Locations WHERE ExternalId = @LocationId
+                """,
+                new { LocationId = locationId });
+
+            if (location is null)
+                return Results.NotFound(new { error = $"Location '{locationId}' not found." });
+
+            var since = (range ?? "week") switch
+            {
+                "today" => DateTime.UtcNow.AddHours(-24),
+                "week"  => DateTime.UtcNow.AddDays(-7),
+                "month" => DateTime.UtcNow.AddDays(-30),
+                _       => DateTime.UtcNow.AddDays(-7)
+            };
+
+            var buckets = await db.QueryAsync<HistoryBucket>("""
+                SELECT
+                    DATE_TRUNC('hour', CreatedAt) AS BucketStart,
+                    AVG(CAST(Level AS REAL))      AS AverageLevel,
+                    CAST(COUNT(*) AS INTEGER)     AS VoteCount
+                FROM Votes
+                WHERE LocationId = @LocationId AND CreatedAt > @Since
+                GROUP BY DATE_TRUNC('hour', CreatedAt)
+                ORDER BY BucketStart
+                """,
+                new { LocationId = location.Id, Since = since });
+
+            return Results.Ok(buckets);
         });
 
         // GET /api/crowdedness

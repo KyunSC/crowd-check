@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { HistoryBucket, HeatmapRange } from '../models/history-bucket';
 
 // The shape of what the API sends back for GET /api/crowdedness/{id}
 export interface CrowdednessResponse {
@@ -30,6 +31,13 @@ export class CrowdednessService {
     return this.http.post<{ message: string }>(
       `${this.apiBase}/crowdedness/${locationId}/vote`,
       { level }
+    );
+  }
+
+  getHistory(locationId: string, range: HeatmapRange) {
+    return this.http.get<HistoryBucket[]>(
+      `${this.apiBase}/crowdedness/${locationId}/history`,
+      { params: { range } }
     );
   }
 }

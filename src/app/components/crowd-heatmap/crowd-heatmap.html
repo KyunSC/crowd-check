@@ -1,0 +1,76 @@
+<div class="flex flex-col gap-2">
+
+  <!-- Day column headers (week only) -->
+  @if (range === 'week') {
+    <div class="flex">
+      <div class="w-8 shrink-0"></div>
+      <div class="flex-1 grid gap-0.5" [style.grid-template-columns]="'repeat(' + gridCols() + ', minmax(0, 1fr))'">
+        @for (day of weekDayLabels(); track day) {
+          <div class="text-center text-[10px] text-base-content/40 font-medium">{{ day }}</div>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="flex gap-1">
+
+    <!-- Hour labels sidebar (week only) -->
+    @if (range === 'week') {
+      <div class="flex flex-col gap-0.5 w-8 shrink-0">
+        @for (hour of hourLabels; track hour) {
+          <div class="text-right text-[10px] text-base-content/30 leading-none h-4 flex items-center justify-end pr-1">
+            {{ hour }}
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Heatmap grid -->
+    <div
+      class="flex-1 grid gap-0.5"
+      [style.grid-template-columns]="'repeat(' + gridCols() + ', minmax(0, 1fr))'">
+      @for (cell of cells(); track $index) {
+        <div
+          class="rounded-sm cursor-default transition-opacity hover:opacity-70"
+          [class]="cellColor(cell)"
+          [class.h-4]="range === 'week'"
+          [class.h-6]="range === 'today'"
+          [class.h-8]="range === 'month'"
+          [title]="cell.tooltipText">
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Hour labels below (today only) — every 6h to avoid clutter -->
+  @if (range === 'today') {
+    <div class="grid gap-0.5" [style.grid-template-columns]="'repeat(24, minmax(0, 1fr))'">
+      @for (cell of cells(); track $index; let i = $index) {
+        <div class="text-center text-[9px] text-base-content/30">
+          {{ i % 6 === 0 ? cell.label : '' }}
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Legend -->
+  <div class="flex items-center gap-3 justify-end mt-1">
+    <div class="flex items-center gap-1">
+      <div class="w-3 h-3 rounded-sm bg-base-300"></div>
+      <span class="text-[10px] text-base-content/40">No data</span>
+    </div>
+    <div class="flex items-center gap-1">
+      <div class="w-3 h-3 rounded-sm bg-success"></div>
+      <span class="text-[10px] text-base-content/40">Quiet</span>
+    </div>
+    <div class="flex items-center gap-1">
+      <div class="w-3 h-3 rounded-sm bg-warning"></div>
+      <span class="text-[10px] text-base-content/40">Moderate</span>
+    </div>
+    <div class="flex items-center gap-1">
+      <div class="w-3 h-3 rounded-sm bg-error"></div>
+      <span class="text-[10px] text-base-content/40">Packed</span>
+    </div>
+  </div>
+
+</div>

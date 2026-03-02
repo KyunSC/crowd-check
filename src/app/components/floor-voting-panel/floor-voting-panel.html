@@ -15,4 +15,46 @@
   @if (errorMessage()) {
     <div class="alert alert-error py-2 text-sm">{{ errorMessage() }}</div>
   }
+
+  <!-- Historical crowdedness -->
+  <div class="border-t border-base-300 pt-3">
+    <button
+      class="btn btn-ghost btn-xs w-full flex justify-between items-center"
+      (click)="toggleHistory()">
+      <span class="text-xs uppercase tracking-wide font-medium text-base-content/50">Historical crowdedness</span>
+      <span class="text-base-content/30 text-xs">{{ showHistory() ? '▲' : '▼' }}</span>
+    </button>
+
+    @if (showHistory()) {
+      <div class="mt-3 flex flex-col gap-3">
+
+        <!-- Range selector -->
+        <div class="join w-full">
+          <button class="btn btn-xs join-item flex-1"
+                  [class.btn-primary]="historyRange() === 'today'"
+                  [class.btn-outline]="historyRange() !== 'today'"
+                  (click)="onRangeChange('today')">Today</button>
+          <button class="btn btn-xs join-item flex-1"
+                  [class.btn-primary]="historyRange() === 'week'"
+                  [class.btn-outline]="historyRange() !== 'week'"
+                  (click)="onRangeChange('week')">Week</button>
+          <button class="btn btn-xs join-item flex-1"
+                  [class.btn-primary]="historyRange() === 'month'"
+                  [class.btn-outline]="historyRange() !== 'month'"
+                  (click)="onRangeChange('month')">Month</button>
+        </div>
+
+        @if (isLoadingHistory()) {
+          <div class="flex justify-center py-4">
+            <span class="loading loading-spinner loading-sm text-primary"></span>
+          </div>
+        } @else if (historyError()) {
+          <div class="alert alert-error py-2 text-sm">{{ historyError() }}</div>
+        } @else {
+          <app-crowd-heatmap [data]="historyData()" [range]="historyRange()"></app-crowd-heatmap>
+        }
+
+      </div>
+    }
+  </div>
 </div>
