@@ -18,6 +18,7 @@ public static class DbSeeder
             return db.ExecuteScalar<int>("""
                 INSERT INTO Locations (ExternalId, Name, Type, ParentId)
                 VALUES (@ExternalId, @Name, @Type, @ParentId)
+                ON CONFLICT (ExternalId) DO UPDATE SET Name = EXCLUDED.Name
                 RETURNING Id
                 """,
                 new { ExternalId = externalId, Name = name, Type = (int)type, ParentId = parentId });
@@ -57,6 +58,7 @@ public static class DbSeeder
             ("mc6", "McLennan 6 – General collection, quiet study"),
             ("rp1", "Redpath 1 – Cyberthèque, cafeteria, group study"),
             ("rp2", "Redpath 2 – Group study pods, study seating"),
+            ("rp3", "Redpath 3 – Group and PhD study rooms"),
         ]);
         AddLibrary("schulich", "Schulich Library", [
             ("sc1", "Floor 1 – Service desk, computer/printing area"),

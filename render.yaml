@@ -1,0 +1,19 @@
+# Render Blueprint — defines the API service for auto-deployment.
+# https://docs.render.com/blueprint-spec
+services:
+  - type: web
+    name: crowdcheck-api
+    runtime: docker
+    dockerfilePath: ./api/Dockerfile
+    dockerContext: ./api
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: ConnectionStrings__Default
+        sync: false  # Set manually in Render dashboard (contains DB password)
+      - key: FrontendOrigin
+        sync: false  # Your Cloudflare Pages URL, e.g. https://crowdcheck.pages.dev
+      - key: IpHashSecret
+        generateValue: true  # Render auto-generates a random secret
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production

@@ -2,6 +2,7 @@ using System.Data;
 using System.Reflection;
 using CrowdCheck.Api.Data;
 using CrowdCheck.Api.Endpoints;
+using Dapper;
 using DbUp;
 using Microsoft.AspNetCore.HttpOverrides;
 using Npgsql;
@@ -23,7 +24,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("Frontend", policy =>
         policy.WithOrigins(frontendOrigin)
               .AllowAnyHeader()
-              .AllowAnyMethod()));
+              .WithMethods("GET", "POST")));
 
 var app = builder.Build();
 
@@ -52,6 +53,19 @@ if (!app.Environment.IsDevelopment())
 
 app.UseCors("Frontend");
 
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    context.Response.Headers["X-Frame-Options"] = "DENY";
+    context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+    context.Response.Headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
+    if (!app.Environment.IsDevelopment())
+    {
+        context.Response.Headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains";
+    }
+    await next();
+});
+
 var upgrader = DeployChanges.To
     .PostgresqlDatabase(connectionString)
     .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
@@ -70,7 +84,21 @@ using (var scope = app.Services.CreateScope())
 }
 
 // --- Endpoints ---
-app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
+app.MapGet("/health", async (IDbConnection db) =>
+{
+    try
+    {
+        await ((NpgsqlConnection)db).OpenAsync();
+        await db.ExecuteScalarAsync<int>("SELECT 1");
+        return Results.Ok(new { status = "healthy", db = "connected" });
+    }
+    catch (Exception ex)
+    {
+        return Results.Json(
+            new { status = "unhealthy", db = ex.Message },
+            statusCode: 503);
+    }
+});
 CrowdednessEndpoints.Map(app);
 
 app.Run();

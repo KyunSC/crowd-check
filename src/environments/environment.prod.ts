@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  // REQUIRED: set this to your deployed API URL before running `ng build`.
-  // Example: 'https://api.crowdcheck.ca/api'
-  apiBase: 'https://your-api-domain.com/api',
+  // Set this to your Render API URL before deploying.
+  // Example: 'https://crowdcheck-api.onrender.com/api'
+  apiBase: 'https://your-api.onrender.com/api',
 };

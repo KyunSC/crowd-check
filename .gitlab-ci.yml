@@ -1,0 +1,26 @@
+# Lightweight CI — just verifies the code builds on merge requests.
+# Render and Cloudflare Pages handle deployment automatically on push to main.
+
+stages:
+  - test
+
+build-api:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:10.0-alpine
+  script:
+    - dotnet restore api/CrowdCheck.Api.csproj
+    - dotnet build api/CrowdCheck.Api.csproj -c Release --no-restore
+  only:
+    - merge_requests
+
+build-frontend:
+  stage: test
+  image: node:22-alpine
+  cache:
+    paths:
+      - node_modules/
+  script:
+    - npm ci
+    - npx ng build --configuration production
+  only:
+    - merge_requests

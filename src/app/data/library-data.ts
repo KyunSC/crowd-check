@@ -24,6 +24,7 @@ export const LIBRARIES: Library[] = [
       { id: 'mc6', name: 'McLennan 6 – General collection, quiet study' },
       { id: 'rp1', name: 'Redpath 1 – Cyberthèque, cafeteria, group study' },
       { id: 'rp2', name: 'Redpath 2 – Group study pods, study seating' },
+      { id: 'rp3', name: 'Redpath 3 – Group and PhD study rooms' },
     ],
   },
   {
