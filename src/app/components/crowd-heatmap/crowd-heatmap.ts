@@ -33,13 +33,14 @@ export class CrowdHeatmap {
     return this.buildMonthCells(map);
   });
 
-  // Day labels for the week header (oldest → newest)
+  // Day labels: Monday → Sunday
   weekDayLabels = computed(() => {
     const labels: string[] = [];
     const now = new Date();
-    for (let dayOffset = -6; dayOffset <= 0; dayOffset++) {
+    const mondayOffset = -((now.getUTCDay() + 6) % 7); // offset from today to this week's Monday
+    for (let i = 0; i < 7; i++) {
       const d = new Date(now);
-      d.setUTCDate(now.getUTCDate() + dayOffset);
+      d.setUTCDate(now.getUTCDate() + mondayOffset + i);
       labels.push(d.toLocaleDateString([], { weekday: 'short' }));
     }
     return labels;
@@ -85,14 +86,15 @@ export class CrowdHeatmap {
     return cells;
   }
 
-  // Week: hour-major order so grid-template-columns:repeat(7) gives hour-rows × day-cols
+  // Week: Monday→Sunday columns × hour rows (06:00–23:00)
   private buildWeekCells(map: Map<string, HistoryBucket>): HeatmapCell[] {
     const cells: HeatmapCell[] = [];
     const now = new Date();
+    const mondayOffset = -((now.getUTCDay() + 6) % 7);
     for (let h = 6; h < 24; h++) {
-      for (let dayOffset = -6; dayOffset <= 0; dayOffset++) {
+      for (let i = 0; i < 7; i++) {
         const d = new Date(now);
-        d.setUTCDate(now.getUTCDate() + dayOffset);
+        d.setUTCDate(now.getUTCDate() + mondayOffset + i);
         d.setUTCHours(h, 0, 0, 0);
         const key = d.toISOString().slice(0, 13);
         const bucket = map.get(key);
