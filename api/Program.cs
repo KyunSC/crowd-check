@@ -16,6 +16,7 @@ var connectionString = builder.Configuration.GetConnectionString("Default")
 builder.Services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(connectionString));
 
 builder.Services.AddOpenApi();
+builder.Services.AddHostedService<VoteCleanupService>();
 
 var frontendOrigin = builder.Configuration["FrontendOrigin"]
     ?? throw new InvalidOperationException("FrontendOrigin is not configured.");
@@ -31,7 +32,11 @@ var app = builder.Build();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+    // Only trust the immediate reverse proxy (1 hop). Any extra X-Forwarded-For
+    // entries beyond the last one are ignored, preventing clients from spoofing
+    // their IP by injecting fake headers.
+    ForwardLimit = 1
 });
 
 if (app.Environment.IsDevelopment())
@@ -59,6 +64,7 @@ app.Use(async (context, next) =>
     context.Response.Headers["X-Frame-Options"] = "DENY";
     context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
     context.Response.Headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
+    context.Response.Headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none'";
     if (!app.Environment.IsDevelopment())
     {
         context.Response.Headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains";
@@ -92,10 +98,10 @@ app.MapGet("/health", async (IDbConnection db) =>
         await db.ExecuteScalarAsync<int>("SELECT 1");
         return Results.Ok(new { status = "healthy", db = "connected" });
     }
-    catch (Exception ex)
+    catch
     {
         return Results.Json(
-            new { status = "unhealthy", db = ex.Message },
+            new { status = "unhealthy", db = "unavailable" },
             statusCode: 503);
     }
 });
