@@ -39,6 +39,13 @@ USER appuser
 COPY --from=build /app/publish .
 
 ENV ASPNETCORE_URLS=http://+:8080
+# Free-tier containers only have 512 MB RAM. These settings prevent OOM kills:
+# - Workstation GC uses less memory than Server GC
+# - Heap hard limit caps .NET's managed heap at 200 MB
+# - Disable diagnostics to save memory
+ENV DOTNET_gcServer=0
+ENV DOTNET_GCHeapHardLimit=0xC800000
+ENV DOTNET_EnableDiagnostics=0
 EXPOSE 8080
 
 # Render and Docker use this to verify the container is healthy.
